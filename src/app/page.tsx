@@ -1,4 +1,5 @@
 import LibFinderForm from "@/components/LibFinderForm";
+import LibFinderList from "@/components/LibFinderList";
 
 function Home() {
   return (
@@ -8,6 +9,8 @@ function Home() {
       </h1>
 
       <LibFinderForm />
+
+      <LibFinderList />
     </div>
   );
 }

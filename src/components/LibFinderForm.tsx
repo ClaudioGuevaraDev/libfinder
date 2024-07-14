@@ -1,6 +1,11 @@
 "use client";
 
 import {
+  Accordion,
+  AccordionItem,
+  Autocomplete,
+  AutocompleteItem,
+  Avatar,
   Button,
   Card,
   CardBody,
@@ -12,6 +17,7 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import { useState } from "react";
+import { IoIosArrowDown } from "react-icons/io";
 
 import {
   languageOptions,
@@ -22,7 +28,7 @@ import {
 function LibFinderForm() {
   const [language, setLanguage] = useState<Selection>(new Set([]));
   const [postedAgo, setPostedAgo] = useState<Selection>(new Set([]));
-  const [license, setLicense] = useState<Selection>(new Set([]));
+  const [license, setLicense] = useState<string | undefined>(undefined);
   const [author, setAuthor] = useState("");
 
   return (
@@ -43,12 +49,23 @@ function LibFinderForm() {
             <Select
               label="Language"
               size="sm"
-              selectionMode="single"
+              selectionMode="multiple"
               selectedKeys={language}
               onSelectionChange={setLanguage}
             >
               {languageOptions.map((option) => (
-                <SelectItem key={option}>{option}</SelectItem>
+                <SelectItem
+                  key={option}
+                  startContent={
+                    <Avatar
+                      alt={option}
+                      className="w-6 h-6"
+                      src={`/svg/${option.toLowerCase()}.svg`}
+                    />
+                  }
+                >
+                  {option}
+                </SelectItem>
               ))}
             </Select>
             <Select
@@ -71,21 +88,31 @@ function LibFinderForm() {
               onValueChange={setAuthor}
             />
 
-            <Select
+            <Autocomplete
               label="License"
               size="sm"
-              selectionMode="single"
-              selectedKeys={license}
-              onSelectionChange={setLicense}
+              selectedKey={license}
+              onSelectionChange={(newValue) => {
+                setLicense(newValue as string);
+              }}
             >
               {licenseOptions.map((option) => (
-                <SelectItem key={option}>{option}</SelectItem>
+                <AutocompleteItem key={option}>{option}</AutocompleteItem>
               ))}
-            </Select>
+            </Autocomplete>
           </div>
+
+          <Accordion variant="shadow" className="bg-zinc-800">
+            <AccordionItem
+              key="advanced-settings"
+              aria-label="Advanced settings"
+              subtitle="Advanced settings"
+              indicator={<IoIosArrowDown className="text-white h-3.5 w-3.5" />}
+            ></AccordionItem>
+          </Accordion>
         </CardBody>
         <CardFooter>
-          <Button color="primary">Search Libraries</Button>
+          <Button color="primary">Find Libraries</Button>
         </CardFooter>
       </Card>
     </div>
