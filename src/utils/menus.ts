@@ -1,13 +1,5 @@
 export const languageOptions = ["JavaScript", "TypeScript", "Python"];
 
-export const postedAgoOptions = [
-  "1 week ago",
-  "1 month ago",
-  "6 months ago",
-  "1 year ago",
-  "5 years ago",
-];
-
 export const licenseOptions = [
   "MIT License",
   "Apache License 2.0",

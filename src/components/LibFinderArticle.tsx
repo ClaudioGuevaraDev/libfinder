@@ -24,6 +24,13 @@ function LibFinderArticle({ recommendation }: Props) {
             <span className="text-base font-semibold text-gray-900 dark:text-white">
               {recommendation.name}
             </span>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              <time dateTime="2022-02-08" title="February 8th, 2022">
+                {format(recommendation.publication_date, {
+                  date: "medium",
+                })}
+              </time>
+            </p>
           </div>
         </div>
       </footer>

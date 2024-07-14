@@ -3,4 +3,5 @@ export interface LibFinderRecommendation {
   language: string;
   description: string;
   link: string;
+  publication_date: string;
 }

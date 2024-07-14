@@ -21,15 +21,10 @@ import { FormEvent, useState } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 
 import { libFinderStore } from "@/store/libfinder.store";
-import {
-  languageOptions,
-  licenseOptions,
-  postedAgoOptions,
-} from "@/utils/menus";
+import { languageOptions, licenseOptions } from "@/utils/menus";
 
 function LibFinderForm() {
   const [language, setLanguage] = useState<Selection>(new Set([]));
-  const [postedAgo, setPostedAgo] = useState<Selection>(new Set([]));
   const [license, setLicense] = useState<string | undefined>(undefined);
   const [author, setAuthor] = useState("");
 
@@ -91,25 +86,6 @@ function LibFinderForm() {
                   </SelectItem>
                 ))}
               </Select>
-              <Select
-                label="Posted ago"
-                size="sm"
-                selectionMode="single"
-                selectedKeys={postedAgo}
-                onSelectionChange={setPostedAgo}
-              >
-                {postedAgoOptions.map((option) => (
-                  <SelectItem key={option}>{option}</SelectItem>
-                ))}
-              </Select>
-
-              <Input
-                type="text"
-                label="Author/Organization"
-                size="sm"
-                value={author}
-                onValueChange={setAuthor}
-              />
 
               <Autocomplete
                 label="License"
@@ -123,6 +99,15 @@ function LibFinderForm() {
                   <AutocompleteItem key={option}>{option}</AutocompleteItem>
                 ))}
               </Autocomplete>
+
+              <Input
+                type="text"
+                label="Author/Organization"
+                size="sm"
+                value={author}
+                onValueChange={setAuthor}
+                className="col-span-2"
+              />
             </div>
 
             <Accordion variant="shadow" className="bg-zinc-800">
