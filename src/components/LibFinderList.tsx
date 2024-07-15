@@ -1,6 +1,5 @@
 "use client";
 
-import { Skeleton } from "@nextui-org/react";
 import { useStore } from "exome/react";
 
 import { libFinderStore } from "@/store/libfinder.store";
@@ -15,9 +14,13 @@ function LibFinderList() {
       {isLoading && (
         <div className="space-y-4">
           {Array.from(Array(3).keys()).map((index) => (
-            <Skeleton key={index} className="rounded-lg">
-              <div className="h-44 rounded-lg bg-default-300"></div>
-            </Skeleton>
+            <div
+              key={index}
+              role="status"
+              className="flex items-center justify-center h-44 bg-gray-300 rounded-lg animate-pulse dark:bg-gray-700"
+            >
+              <span className="sr-only">Loading...</span>
+            </div>
           ))}
         </div>
       )}

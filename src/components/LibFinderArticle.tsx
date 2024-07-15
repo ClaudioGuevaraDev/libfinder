@@ -1,6 +1,6 @@
 import { format } from "@formkit/tempo";
-import { Link } from "@nextui-org/react";
 import Image from "next/image";
+import { FaExternalLinkAlt } from "react-icons/fa";
 
 import { LibFinderRecommendation } from "@/interfaces/libfinder.interface";
 
@@ -38,14 +38,14 @@ function LibFinderArticle({ recommendation }: Props) {
         {recommendation.description}
       </p>
       <div className="flex items-center gap-2 mt-3 flex-wrap">
-        <Link
-          isExternal
-          showAnchorIcon
+        <a
           href={recommendation.link}
-          color="foreground"
+          target="_blank"
+          className="inline-flex items-center font-medium text-white hover:text-opacity-80 ease-out duration-200"
         >
           {recommendation.name}
-        </Link>
+          <FaExternalLinkAlt className="w-3 h-3 ms-2" />
+        </a>
       </div>
     </article>
   );
