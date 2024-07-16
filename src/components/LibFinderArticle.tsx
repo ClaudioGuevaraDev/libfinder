@@ -15,8 +15,8 @@ function LibFinderArticle({ recommendation }: Props) {
         <div className="flex items-center">
           <Image
             className="mr-2 w-6 h-6 rounded-lg"
-            src="/svg/python.svg"
-            alt="JavaScript"
+            src={`/svg/${recommendation.language.toLowerCase()}.svg`}
+            alt={recommendation.language}
             width={32}
             height={32}
           />

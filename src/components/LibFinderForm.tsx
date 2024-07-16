@@ -1,15 +1,16 @@
 "use client";
 
 import { useStore } from "exome/react";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 
 import { libFinderStore } from "@/store/libfinder.store";
 import { languageOptions, licenseOptions } from "@/utils/menus";
 
 function LibFinderForm() {
-  const { isLoading, setLoading, setRecommendations } =
-    useStore(libFinderStore);
+  const [search, setSearch] = useState("");
+
+  const { setLoading, setRecommendations } = useStore(libFinderStore);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -19,6 +20,12 @@ function LibFinderForm() {
     try {
       const response = await fetch("/api/libfinder", {
         method: "POST",
+        body: JSON.stringify({
+          prompt: search,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
       const data = await response.json();
 
@@ -46,6 +53,8 @@ function LibFinderForm() {
             id="libfinder-search"
             className="block w-full p-4 ps-12 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 truncate"
             placeholder="Example: web frameworks, data analysis tools, graphing libraries, etc."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
       </form>

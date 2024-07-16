@@ -1,44 +1,47 @@
 import { openai } from "@ai-sdk/openai";
 import { generateText } from "ai";
+import { NextRequest } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-export async function POST() {
-  // const { text } = await generateText({
-  //   model: openai("gpt-3.5-turbo-0125"),
-  //   system: "You are a recommended programming libraries",
-  //   prompt: `Request: Libraries for working with whastapp
-  // Languages: JavaScript, Python
-  // Author/Organization: Any
-  // License: Any
-  // You must respond with an array of objects with the fields: name, language, description, link, publication_date (format yyyy-mm-dd). Answer only with the array.`,
-  // });
+export async function POST(request: NextRequest) {
+  const { prompt } = await request.json();
 
-  // console.log(text);
+  //   const { text } = await generateText({
+  //     model: openai("gpt-3.5-turbo-0125"),
+  //     system: "You are a recommended programming libraries",
+  //     prompt: `Request: ${prompt}
+  //   Languages: JavaScript, TypeScript, Python
+  //   Author/Organization: Any
+  //   License: Any
+  //   You must respond with an array of objects with the fields: name, language, description, link, publication_date (format yyyy-mm-dd). Answer only with the array. Delivers 1 library per language.`,
+  //   });
+
+  //   console.log(text);
 
   const text = `[
-      {
-          "name": "whatsapp-web.js",
-          "language": "JavaScript",
-          "description": "A WhatsApp client library for NodeJS that connects through the WhatsApp Web browser app.",
-          "link": "https://github.com/pedroslopez/whatsapp-web.js",
-          "publication_date": "2020-08-28"
-      },
-      {
-          "name": "yowsup",
-          "language": "Python",
-          "description": "A Python library that enables building applications which use WhatsApp service.",
-          "link": "https://github.com/tgalal/yowsup",
-          "publication_date": "2012-11-21"
-      },
-      {
-          "name": "Chat-API",
-          "language": "PHP",
-          "description": "A PHP library to send and receive messages using WhatsApp.",
-          "link": "https://github.com/mgp25/Chat-API",
-          "publication_date": "2014-11-06"
-      }
-  ]`;
+  {
+    "name": "Nodemailer",
+    "language": "JavaScript",
+    "description": "A module for Node.js applications to allow easy email sending.",
+    "link": "https://nodemailer.com/",
+    "publication_date": "2021-09-15"
+  },
+  {
+    "name": "Emails",
+    "language": "TypeScript",
+    "description": "A TypeScript library for sending emails with ease.",
+    "link": "https://github.com/emails-ts/emails",
+    "publication_date": "2021-11-20"
+  },
+  {
+    "name": "smtplib",
+    "language": "Python",
+    "description": "A built-in SMTP library in Python for sending emails.",
+    "link": "https://docs.python.org/3/library/smtplib.html",
+    "publication_date": "2021-03-10"
+  }
+]`;
 
   return Response.json({ libraries: text });
 }
