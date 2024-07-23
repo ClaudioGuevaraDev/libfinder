@@ -1,4 +1,18 @@
-export const languageOptions = ["JavaScript", "TypeScript", "Python"];
+export const languageOptions = [
+  "JavaScript",
+  "TypeScript",
+  "Python",
+  "Java",
+  "PHP",
+  "C++",
+  "C",
+  "Go",
+  "Rust",
+  "Kotlin",
+  "Ruby",
+  "Dart",
+  "Swift",
+];
 
 export const licenseOptions = [
   "MIT License",
