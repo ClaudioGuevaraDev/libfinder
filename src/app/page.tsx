@@ -1,7 +1,13 @@
+"use client";
+
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+
 import LibFinderForm from "@/components/LibFinderForm";
 import LibFinderList from "@/components/LibFinderList";
 
 function Home() {
+  const [parent, enableAnimations] = useAutoAnimate();
+
   return (
     <div>
       <h1 className="mb-6 text-5xl font-extrabold tracking-tight leading-none md:text-5xl lg:text-7xl text-center bg-gradient-to-r from-blue-600 to-cyan-400 bg-clip-text text-transparent">
@@ -12,9 +18,9 @@ function Home() {
         Recommendations from LibFinder
       </p>
 
-      <LibFinderForm />
+      <LibFinderForm enableAnimations={enableAnimations} />
 
-      <LibFinderList />
+      <LibFinderList parent={parent} />
     </div>
   );
 }

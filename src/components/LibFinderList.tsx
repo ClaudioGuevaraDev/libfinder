@@ -1,12 +1,17 @@
 "use client";
 
 import { useStore } from "exome/react";
+import { RefCallback } from "react";
 
 import { libFinderStore } from "@/store/libfinder.store";
 
 import LibFinderArticle from "./LibFinderArticle";
 
-function LibFinderList() {
+interface Props {
+  parent: RefCallback<Element>;
+}
+
+function LibFinderList({ parent }: Props) {
   const { recommendations, isLoading } = useStore(libFinderStore);
 
   return (
@@ -25,12 +30,14 @@ function LibFinderList() {
         </div>
       )}
 
-      {recommendations.map((recommendation) => (
-        <LibFinderArticle
-          key={recommendation.name}
-          recommendation={recommendation}
-        />
-      ))}
+      <div ref={parent}>
+        {recommendations.map((recommendation) => (
+          <LibFinderArticle
+            key={recommendation.name}
+            recommendation={recommendation}
+          />
+        ))}
+      </div>
     </div>
   );
 }

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ai-sdk/openai": "0.0.36",
+    "@formkit/auto-animate": "^0.8.2",
     "@formkit/tempo": "0.1.2",
     "@nextui-org/react": "2.4.6",
     "ai": "3.2.22",

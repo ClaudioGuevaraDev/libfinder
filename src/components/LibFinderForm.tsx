@@ -11,7 +11,11 @@ import { libfinderRequest } from "@/utils/libfinderRequest";
 
 import LibFinderSettings from "./LibFinderSettings";
 
-function LibFinderForm() {
+interface Props {
+  enableAnimations: (enabled: boolean) => void;
+}
+
+function LibFinderForm({ enableAnimations }: Props) {
   const [search, setSearch] = useState("");
 
   const {
@@ -28,6 +32,8 @@ function LibFinderForm() {
     e.preventDefault();
 
     setLoading(true);
+    enableAnimations(false);
+    setRecommendations([]);
 
     try {
       const recommendations = await libfinderRequest(
@@ -38,6 +44,7 @@ function LibFinderForm() {
         Array.from(languageRecommendations)[0] as string
       );
 
+      enableAnimations(true);
       setRecommendations(recommendations);
     } catch (error) {}
 
