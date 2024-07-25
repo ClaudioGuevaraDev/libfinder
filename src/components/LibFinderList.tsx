@@ -1,7 +1,9 @@
 "use client";
 
+import { Button } from "@nextui-org/react";
 import { useStore } from "exome/react";
 import { RefCallback } from "react";
+import { IoMdRefresh } from "react-icons/io";
 
 import { libFinderStore } from "@/store/libfinder.store";
 
@@ -12,7 +14,7 @@ interface Props {
 }
 
 function LibFinderList({ parent }: Props) {
-  const { recommendations, isLoading } = useStore(libFinderStore);
+  const { recommendations, isLoading, resetStore } = useStore(libFinderStore);
 
   return (
     <div className="mt-12">
@@ -31,6 +33,19 @@ function LibFinderList({ parent }: Props) {
       )}
 
       <div ref={parent}>
+        {recommendations.length > 0 && (
+          <div className="flex justify-end mb-3">
+            <Button
+              size="sm"
+              color="primary"
+              startContent={<IoMdRefresh className="w-5 h-5" />}
+              onPress={resetStore}
+            >
+              Reset
+            </Button>
+          </div>
+        )}
+
         {recommendations.map((recommendation) => (
           <LibFinderArticle
             key={recommendation.name}

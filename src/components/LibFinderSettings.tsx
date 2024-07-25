@@ -26,13 +26,13 @@ interface Props {
   isOpen: boolean;
   onOpenChange: (value: boolean) => void;
   onClose: () => void;
-  search: string;
 }
 
-function LibFinderSettings({ isOpen, onOpenChange, onClose, search }: Props) {
+function LibFinderSettings({ isOpen, onOpenChange, onClose }: Props) {
   const [loading, setLoading] = useState(false);
 
   const {
+    search,
     languages,
     setLanguages,
     licenses,
