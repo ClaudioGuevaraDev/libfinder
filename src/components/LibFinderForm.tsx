@@ -1,121 +1,109 @@
 "use client";
 
-import {
-  Accordion,
-  AccordionItem,
-  Autocomplete,
-  AutocompleteItem,
-  Avatar,
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  Input,
-  Select,
-  Selection,
-  SelectItem,
-  Textarea,
-} from "@nextui-org/react";
-import { useState } from "react";
-import { IoIosArrowDown } from "react-icons/io";
+import { useDisclosure } from "@nextui-org/react";
+import { useStore } from "exome/react";
+import { FormEvent, useState } from "react";
+import { FiSearch } from "react-icons/fi";
+import { IoMdSettings } from "react-icons/io";
+import { toast } from "sonner";
 
-import {
-  languageOptions,
-  licenseOptions,
-  postedAgoOptions,
-} from "@/utils/menus";
+import { libFinderStore } from "@/store/libfinder.store";
+import { libfinderRequest } from "@/utils/libfinderRequest";
 
-function LibFinderForm() {
-  const [language, setLanguage] = useState<Selection>(new Set([]));
-  const [postedAgo, setPostedAgo] = useState<Selection>(new Set([]));
-  const [license, setLicense] = useState<string | undefined>(undefined);
-  const [author, setAuthor] = useState("");
+import LibFinderSettings from "./LibFinderSettings";
+
+interface Props {
+  enableAnimations: (enabled: boolean) => void;
+}
+
+function LibFinderForm({ enableAnimations }: Props) {
+  const [search, setSearch] = useState("");
+
+  const {
+    setLoading,
+    setRecommendations,
+    languages,
+    licenses,
+    model,
+    languageRecommendations,
+  } = useStore(libFinderStore);
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (search === "") {
+      toast.warning("You must indicate the library to search");
+      return;
+    }
+
+    setLoading(true);
+    enableAnimations(false);
+    setRecommendations([]);
+
+    try {
+      const recommendations = await libfinderRequest(
+        search,
+        languages,
+        licenses,
+        Array.from(model)[0] as string,
+        Array.from(languageRecommendations)[0] as string
+      );
+
+      enableAnimations(true);
+      setRecommendations(recommendations);
+    } catch (error) {
+      toast.error("Error generating recommendations");
+    }
+
+    setLoading(false);
+  };
 
   return (
-    <div className="mt-12">
-      <Card>
-        <CardBody className="space-y-4">
-          <Textarea
-            label="Specify the type of library you are looking for "
-            placeholder="For example, web frameworks, data analysis tools"
-            rows={6}
-            minRows={6}
-            maxRows={6}
-            className="col-span-6"
-            isRequired
-          />
-
-          <div className="grid grid-cols-2 gap-3">
-            <Select
-              label="Language"
-              size="sm"
-              selectionMode="multiple"
-              selectedKeys={language}
-              onSelectionChange={setLanguage}
+    <>
+      <div className="mt-12">
+        <form
+          onSubmit={handleSubmit}
+          className="max-w-3xl mx-auto flex items-center gap-1"
+        >
+          <div className="w-full">
+            <label
+              htmlFor="libfinder-search"
+              className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
             >
-              {languageOptions.map((option) => (
-                <SelectItem
-                  key={option}
-                  startContent={
-                    <Avatar
-                      alt={option}
-                      className="w-6 h-6"
-                      src={`/svg/${option.toLowerCase()}.svg`}
-                    />
-                  }
-                >
-                  {option}
-                </SelectItem>
-              ))}
-            </Select>
-            <Select
-              label="Posted ago"
-              size="sm"
-              selectionMode="single"
-              selectedKeys={postedAgo}
-              onSelectionChange={setPostedAgo}
-            >
-              {postedAgoOptions.map((option) => (
-                <SelectItem key={option}>{option}</SelectItem>
-              ))}
-            </Select>
-
-            <Input
-              type="text"
-              label="Author/Organization"
-              size="sm"
-              value={author}
-              onValueChange={setAuthor}
-            />
-
-            <Autocomplete
-              label="License"
-              size="sm"
-              selectedKey={license}
-              onSelectionChange={(newValue) => {
-                setLicense(newValue as string);
-              }}
-            >
-              {licenseOptions.map((option) => (
-                <AutocompleteItem key={option}>{option}</AutocompleteItem>
-              ))}
-            </Autocomplete>
+              Search
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 start-0 flex items-center ps-5 pointer-events-none">
+                <FiSearch className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              </div>
+              <input
+                type="search"
+                id="libfinder-search"
+                className="block w-full p-3.5 ps-12 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 truncate"
+                placeholder="Example: web frameworks, data analysis tools, graphing libraries, etc."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
           </div>
+          <button
+            type="button"
+            className="p-2.5 ms-2 text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            onClick={onOpen}
+          >
+            <IoMdSettings className="w-6 h-6" />
+          </button>
+        </form>
+      </div>
 
-          <Accordion variant="shadow" className="bg-zinc-800">
-            <AccordionItem
-              key="advanced-settings"
-              aria-label="Advanced settings"
-              subtitle="Advanced settings"
-              indicator={<IoIosArrowDown className="text-white h-3.5 w-3.5" />}
-            ></AccordionItem>
-          </Accordion>
-        </CardBody>
-        <CardFooter>
-          <Button color="primary">Find Libraries</Button>
-        </CardFooter>
-      </Card>
-    </div>
+      <LibFinderSettings
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        onClose={onClose}
+        search={search}
+      />
+    </>
   );
 }
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { NextUIProvider } from "@nextui-org/react";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ReactNode } from "react";
+import { Toaster } from "sonner";
 
 interface Props {
   children: ReactNode;
@@ -11,9 +11,8 @@ interface Props {
 function Providers({ children }: Props) {
   return (
     <NextUIProvider>
-      <NextThemesProvider attribute="class" defaultTheme="dark">
-        {children}
-      </NextThemesProvider>
+      <main>{children}</main>
+      <Toaster richColors position="bottom-right" expand />
     </NextUIProvider>
   );
 }
