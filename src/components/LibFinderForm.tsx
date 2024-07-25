@@ -32,13 +32,16 @@ function LibFinderForm({ enableAnimations }: Props) {
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (search === "") {
+      toast.warning("You must indicate the library to search");
+      return;
+    }
+
     setLoading(true);
     enableAnimations(false);
     setRecommendations([]);
 
     try {
-      throw new Error();
-
       const recommendations = await libfinderRequest(
         search,
         languages,

@@ -73,7 +73,7 @@ function LibFinderSettings({ isOpen, onOpenChange, onClose, search }: Props) {
         <>
           <ModalHeader>LibFinder Settings</ModalHeader>
 
-          <ModalBody className="grid grid-cols-2 gap-4">
+          <ModalBody className="grid md:grid-cols-2 gap-4">
             <Select
               label="Programming languages"
               selectedKeys={languages}
@@ -162,7 +162,8 @@ function LibFinderSettings({ isOpen, onOpenChange, onClose, search }: Props) {
               isDisabled={
                 Array.from(languages).length === 0 ||
                 Array.from(model).length === 0 ||
-                Array.from(languageRecommendations).length === 0
+                Array.from(languageRecommendations).length === 0 ||
+                search === ""
               }
             >
               Apply

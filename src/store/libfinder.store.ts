@@ -7,13 +7,7 @@ import { languageRecommendationOptions, modelOptions } from "@/utils/menus";
 export class LibFinderStore extends Exome {
   public recommendations: LibFinderRecommendation[] = [];
   public isLoading = false;
-  public languages: Selection = new Set([
-    "JavaScript",
-    "TypeScript",
-    "Python",
-    "Java",
-    "PHP",
-  ]);
+  public languages: Selection = new Set(["JavaScript", "Python", "Java"]);
   public licenses: Selection = new Set([]);
   public model: Selection = new Set([modelOptions[0]]);
   public languageRecommendations: Selection = new Set([

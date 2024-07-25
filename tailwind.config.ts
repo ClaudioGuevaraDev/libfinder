@@ -12,6 +12,7 @@ const config: Config = {
   theme: {
     extend: {},
   },
+  darkMode: "class",
   plugins: [require("flowbite/plugin"), nextui()],
 };
 export default config;
