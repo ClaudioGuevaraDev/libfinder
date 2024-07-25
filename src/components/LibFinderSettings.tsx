@@ -11,6 +11,7 @@ import {
 } from "@nextui-org/react";
 import { useStore } from "exome/react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 import { libFinderStore } from "@/store/libfinder.store";
 import { libfinderRequest } from "@/utils/libfinderRequest";
@@ -59,6 +60,7 @@ function LibFinderSettings({ isOpen, onOpenChange, onClose, search }: Props) {
 
       onClose();
     } catch (error) {
+      toast.error("Error generating recommendations");
       onClose();
     }
 

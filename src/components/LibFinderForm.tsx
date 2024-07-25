@@ -5,6 +5,7 @@ import { useStore } from "exome/react";
 import { FormEvent, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { IoMdSettings } from "react-icons/io";
+import { toast } from "sonner";
 
 import { libFinderStore } from "@/store/libfinder.store";
 import { libfinderRequest } from "@/utils/libfinderRequest";
@@ -36,6 +37,8 @@ function LibFinderForm({ enableAnimations }: Props) {
     setRecommendations([]);
 
     try {
+      throw new Error();
+
       const recommendations = await libfinderRequest(
         search,
         languages,
@@ -46,7 +49,9 @@ function LibFinderForm({ enableAnimations }: Props) {
 
       enableAnimations(true);
       setRecommendations(recommendations);
-    } catch (error) {}
+    } catch (error) {
+      toast.error("Error generating recommendations");
+    }
 
     setLoading(false);
   };
