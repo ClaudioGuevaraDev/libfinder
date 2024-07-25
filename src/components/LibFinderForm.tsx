@@ -7,14 +7,21 @@ import { FiSearch } from "react-icons/fi";
 import { IoMdSettings } from "react-icons/io";
 
 import { libFinderStore } from "@/store/libfinder.store";
+import { libfinderRequest } from "@/utils/libfinderRequest";
 
 import LibFinderSettings from "./LibFinderSettings";
 
 function LibFinderForm() {
   const [search, setSearch] = useState("");
 
-  const { setLoading, setRecommendations, languages, licenses } =
-    useStore(libFinderStore);
+  const {
+    setLoading,
+    setRecommendations,
+    languages,
+    licenses,
+    model,
+    languageRecommendations,
+  } = useStore(libFinderStore);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -23,26 +30,15 @@ function LibFinderForm() {
     setLoading(true);
 
     try {
-      const response = await fetch("/api/libfinder", {
-        method: "POST",
-        body: JSON.stringify({
-          prompt: search,
-          languages:
-            Array.from(languages).length === 0
-              ? "Any"
-              : Array.from(languages).join(","),
-          licenses:
-            Array.from(licenses).length === 0
-              ? "Any"
-              : Array.from(licenses).join(","),
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
+      const recommendations = await libfinderRequest(
+        search,
+        languages,
+        licenses,
+        Array.from(model)[0] as string,
+        Array.from(languageRecommendations)[0] as string
+      );
 
-      setRecommendations(JSON.parse(data.libraries));
+      setRecommendations(recommendations);
     } catch (error) {}
 
     setLoading(false);
@@ -90,6 +86,7 @@ function LibFinderForm() {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}
+        search={search}
       />
     </>
   );

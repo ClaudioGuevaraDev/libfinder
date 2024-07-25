@@ -2,6 +2,7 @@ import { Selection } from "@nextui-org/react";
 import { Exome } from "exome";
 
 import { LibFinderRecommendation } from "@/interfaces/libfinder.interface";
+import { languageRecommendationOptions, modelOptions } from "@/utils/menus";
 
 export class LibFinderStore extends Exome {
   public recommendations: LibFinderRecommendation[] = [];
@@ -14,6 +15,10 @@ export class LibFinderStore extends Exome {
     "PHP",
   ]);
   public licenses: Selection = new Set([]);
+  public model: Selection = new Set([modelOptions[0]]);
+  public languageRecommendations: Selection = new Set([
+    languageRecommendationOptions[0],
+  ]);
 
   public setRecommendations(recommendations: LibFinderRecommendation[]) {
     this.recommendations = recommendations;
@@ -29,6 +34,14 @@ export class LibFinderStore extends Exome {
 
   public setLicenses(licenses: Selection) {
     this.licenses = licenses;
+  }
+
+  public setModel(model: Selection) {
+    this.model = model;
+  }
+
+  public setLanguageRecommendations(recommendations: Selection) {
+    this.languageRecommendations = recommendations;
   }
 }
 

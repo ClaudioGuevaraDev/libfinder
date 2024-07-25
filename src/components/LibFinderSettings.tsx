@@ -10,19 +10,60 @@ import {
   SelectItem,
 } from "@nextui-org/react";
 import { useStore } from "exome/react";
+import { useState } from "react";
 
 import { libFinderStore } from "@/store/libfinder.store";
-import { languageOptions, licenseOptions } from "@/utils/menus";
+import { libfinderRequest } from "@/utils/libfinderRequest";
+import {
+  languageOptions,
+  languageRecommendationOptions,
+  licenseOptions,
+  modelOptions,
+} from "@/utils/menus";
 
 interface Props {
   isOpen: boolean;
   onOpenChange: (value: boolean) => void;
   onClose: () => void;
+  search: string;
 }
 
-function LibFinderSettings({ isOpen, onOpenChange, onClose }: Props) {
-  const { languages, setLanguages, licenses, setLicenses } =
-    useStore(libFinderStore);
+function LibFinderSettings({ isOpen, onOpenChange, onClose, search }: Props) {
+  const [loading, setLoading] = useState(false);
+
+  const {
+    languages,
+    setLanguages,
+    licenses,
+    setLicenses,
+    model,
+    setModel,
+    languageRecommendations,
+    setLanguageRecommendations,
+    setRecommendations,
+  } = useStore(libFinderStore);
+
+  const handleLibfinder = async () => {
+    setLoading(true);
+
+    try {
+      const recommendations = await libfinderRequest(
+        search,
+        languages,
+        licenses,
+        Array.from(model)[0] as string,
+        Array.from(languageRecommendations)[0] as string
+      );
+
+      setRecommendations(recommendations);
+
+      onClose();
+    } catch (error) {
+      onClose();
+    }
+
+    setLoading(false);
+  };
 
   return (
     <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="xl">
@@ -38,7 +79,7 @@ function LibFinderSettings({ isOpen, onOpenChange, onClose }: Props) {
               selectionMode="multiple"
               description={
                 Array.from(languages).length === 0 &&
-                "Programming language unspecified"
+                "You must select at least 1 programming language"
               }
             >
               {languageOptions.map((language) => (
@@ -73,13 +114,55 @@ function LibFinderSettings({ isOpen, onOpenChange, onClose }: Props) {
                 </SelectItem>
               ))}
             </Select>
+
+            <Select
+              label="Model"
+              selectedKeys={model}
+              onSelectionChange={setModel}
+              selectionMode="single"
+              description={
+                Array.from(model).length === 0 && "You must select 1 model"
+              }
+            >
+              {modelOptions.map((model) => (
+                <SelectItem key={model} value={model}>
+                  {model}
+                </SelectItem>
+              ))}
+            </Select>
+
+            <Select
+              label="Language recommendations"
+              selectedKeys={languageRecommendations}
+              onSelectionChange={setLanguageRecommendations}
+              selectionMode="single"
+              description={
+                Array.from(languageRecommendations).length === 0 &&
+                "You must select a recommendation quantity"
+              }
+            >
+              {languageRecommendationOptions.map((recommendation) => (
+                <SelectItem key={recommendation} value={recommendation}>
+                  {recommendation}
+                </SelectItem>
+              ))}
+            </Select>
           </ModalBody>
 
           <ModalFooter>
             <Button color="default" variant="flat" onPress={onClose}>
               Close
             </Button>
-            <Button color="primary" onPress={onClose}>
+            <Button
+              color="primary"
+              onPress={handleLibfinder}
+              isLoading={loading}
+              isDisabled={
+                Array.from(languages).length === 0 ||
+                Array.from(model).length === 0 ||
+                Array.from(languageRecommendations).length === 0
+              }
+            >
               Apply
             </Button>
           </ModalFooter>
