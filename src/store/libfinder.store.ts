@@ -5,6 +5,7 @@ import { LibFinderRecommendation } from "@/interfaces/libfinder.interface";
 import { languageRecommendationOptions, modelOptions } from "@/utils/menus";
 
 export class LibFinderStore extends Exome {
+  public search = "";
   public recommendations: LibFinderRecommendation[] = [];
   public isLoading = false;
   public languages: Selection = new Set(["JavaScript", "Python", "Java"]);
@@ -13,6 +14,10 @@ export class LibFinderStore extends Exome {
   public languageRecommendations: Selection = new Set([
     languageRecommendationOptions[0],
   ]);
+
+  public setSearch(value: string) {
+    this.search = value;
+  }
 
   public setRecommendations(recommendations: LibFinderRecommendation[]) {
     this.recommendations = recommendations;
@@ -36,6 +41,16 @@ export class LibFinderStore extends Exome {
 
   public setLanguageRecommendations(recommendations: Selection) {
     this.languageRecommendations = recommendations;
+  }
+
+  public resetStore() {
+    this.search = "";
+    this.isLoading = false;
+    this.recommendations = [];
+    this.languages = new Set(["JavaScript", "Python", "Java"]);
+    this.licenses = new Set([]);
+    this.model = new Set([modelOptions[0]]);
+    this.languageRecommendations = new Set([languageRecommendationOptions[0]]);
   }
 }
 

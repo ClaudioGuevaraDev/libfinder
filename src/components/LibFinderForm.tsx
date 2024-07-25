@@ -2,7 +2,7 @@
 
 import { useDisclosure } from "@nextui-org/react";
 import { useStore } from "exome/react";
-import { FormEvent, useState } from "react";
+import { FormEvent } from "react";
 import { FiSearch } from "react-icons/fi";
 import { IoMdSettings } from "react-icons/io";
 import { toast } from "sonner";
@@ -17,8 +17,6 @@ interface Props {
 }
 
 function LibFinderForm({ enableAnimations }: Props) {
-  const [search, setSearch] = useState("");
-
   const {
     setLoading,
     setRecommendations,
@@ -26,6 +24,8 @@ function LibFinderForm({ enableAnimations }: Props) {
     licenses,
     model,
     languageRecommendations,
+    search,
+    setSearch,
   } = useStore(libFinderStore);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
@@ -101,7 +101,6 @@ function LibFinderForm({ enableAnimations }: Props) {
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={onClose}
-        search={search}
       />
     </>
   );
